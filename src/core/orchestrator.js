@@ -22,7 +22,11 @@ export class Orchestrator {
     };
     const context = this.contextFactory ? await this.contextFactory(baseContext, task) : baseContext;
 
-    this.logger.info(`Task ${task.id} matched ${agents.length} agent(s)`);
+    this.logger.info(`Task ${task.id} matched ${agents.length} agent(s)`, {
+      taskId: task.id,
+      matchedAgents: agents.map((agent) => agent.id),
+      plannedSteps: plan?.steps ?? []
+    });
 
     const results = [];
     for (const agent of agents) {

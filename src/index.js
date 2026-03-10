@@ -105,5 +105,9 @@ scheduler.add({
 const task = JSON.parse(readFileSync(new URL('../examples/demo-task.json', import.meta.url), 'utf8'));
 const result = await orchestrator.execute(task);
 
-logger.info('Execution complete');
+logger.info('Execution complete', {
+  taskId: task.id,
+  jobCount: scheduler.list().length,
+  memoryItems: memory.getRecent().length
+});
 console.log(JSON.stringify({ jobs: scheduler.list(), result, memory: memory.getRecent() }, null, 2));

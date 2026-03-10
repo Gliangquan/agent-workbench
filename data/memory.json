@@ -1,0 +1,24 @@
+{
+  "items": [
+    {
+      "type": "execution",
+      "taskId": "task-demo-001",
+      "agentId": "github-ops-1",
+      "summary": "Generated GitHub ops report for Gliangquan/agent-workbench",
+      "createdAt": "2026-03-10T13:03:41.723Z"
+    },
+    {
+      "type": "reporting",
+      "taskId": "task-demo-001",
+      "summary": "Reporter prepared summary for task-demo-001",
+      "createdAt": "2026-03-10T13:03:41.727Z"
+    },
+    {
+      "type": "execution",
+      "taskId": "task-demo-001",
+      "agentId": "reporter-1",
+      "summary": "Reporter prepared summary for task-demo-001",
+      "createdAt": "2026-03-10T13:03:41.728Z"
+    }
+  ]
+}

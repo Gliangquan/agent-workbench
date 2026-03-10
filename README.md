@@ -30,11 +30,11 @@ Most agent projects look impressive but are hard to customize for real daily wor
 - `src/core/tool-runner.js` — actual tool execution layer
 - `src/core/planner.js` — task planning and step suggestions
 - `src/core/policy.js` — default permission and safety checks
-- `src/core/memory.js` — in-memory + file-backed memory abstraction
+- `src/core/memory.js` — file-backed memory store
 - `src/core/scheduler.js` — scheduled task management
 - `src/adapters/github.js` — GitHub repository inspection adapter
 - `src/agents/github-ops-agent.js` — example GitHub ops agent
-- `src/runtime/logger.js` — execution logging
+- `src/runtime/logger.js` — structured execution logging
 - `src/index.js` — runnable demo entrypoint
 
 ## MVP roadmap
@@ -73,6 +73,7 @@ node src/index.js
 - `docs/architecture.md` — system design
 - `docs/roadmap.md` — implementation phases
 - `examples/` — sample agent configurations
+- `data/` — generated memory and execution logs
 
 ## License
 
