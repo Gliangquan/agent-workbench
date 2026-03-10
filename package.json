@@ -1,0 +1,13 @@
+{
+  "name": "agent-workbench",
+  "version": "0.1.0",
+  "private": false,
+  "type": "module",
+  "description": "Multi-agent workbench for orchestration, skills, memory, and GitHub ops",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
