@@ -31,7 +31,8 @@ Most agent projects look impressive but are hard to customize for real daily wor
 - `src/core/planner.js` — task planning and step suggestions
 - `src/core/policy.js` — default permission and safety checks
 - `src/core/memory.js` — file-backed memory store
-- `src/core/scheduler.js` — scheduled task management
+- `src/core/scheduler.js` — persistent scheduled job store
+- `src/core/job-runner.js` — due-job execution runtime
 - `src/adapters/github.js` — GitHub repository inspection adapter
 - `src/agents/github-ops-agent.js` — example GitHub ops agent
 - `src/runtime/logger.js` — structured execution logging

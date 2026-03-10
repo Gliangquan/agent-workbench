@@ -1,0 +1,12 @@
+{
+  "jobs": [
+    {
+      "id": "repo-health-check",
+      "kind": "every",
+      "expr": "1h",
+      "handler": "github.repoHealth",
+      "createdAt": "2026-03-10T15:19:04.793Z",
+      "lastRunAt": "2026-03-10T15:19:05.110Z"
+    }
+  ]
+}

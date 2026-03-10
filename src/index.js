@@ -3,6 +3,7 @@ import { Agent } from './core/agent.js';
 import { Registry } from './core/registry.js';
 import { MemoryStore } from './core/memory.js';
 import { Scheduler } from './core/scheduler.js';
+import { JobRunner } from './core/job-runner.js';
 import { Orchestrator } from './core/orchestrator.js';
 import { ToolRunner } from './core/tool-runner.js';
 import { Planner } from './core/planner.js';
@@ -97,17 +98,35 @@ registry.registerAgent(
 );
 
 scheduler.add({
-  id: 'daily-github-digest',
-  kind: 'cron',
-  expr: '0 8 * * *'
+  id: 'repo-health-check',
+  kind: 'every',
+  expr: '1h',
+  handler: 'github.repoHealth'
+});
+
+const jobRunner = new JobRunner({
+  scheduler,
+  logger,
+  handlers: {
+    async 'github.repoHealth'(job) {
+      const repo = await github.inspectRepo('Gliangquan/agent-workbench');
+      return {
+        jobId: job.id,
+        summary: `Repo health snapshot for ${repo.fullName}`,
+        repo
+      };
+    }
+  }
 });
 
 const task = JSON.parse(readFileSync(new URL('../examples/demo-task.json', import.meta.url), 'utf8'));
 const result = await orchestrator.execute(task);
+const jobResults = await jobRunner.runDueJobs();
 
 logger.info('Execution complete', {
   taskId: task.id,
   jobCount: scheduler.list().length,
-  memoryItems: memory.getRecent().length
+  memoryItems: memory.getRecent().length,
+  dueJobsExecuted: jobResults.length
 });
-console.log(JSON.stringify({ jobs: scheduler.list(), result, memory: memory.getRecent() }, null, 2));
+console.log(JSON.stringify({ jobs: scheduler.list(), jobResults, result, memory: memory.getRecent() }, null, 2));

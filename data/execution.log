@@ -1,3 +1,7 @@
 {"timestamp":"2026-03-10T13:03:41.381Z","level":"INFO","message":"Registered job: daily-github-digest","meta":{}}
 {"timestamp":"2026-03-10T13:03:41.386Z","level":"INFO","message":"Task task-demo-001 matched 2 agent(s)","meta":{"taskId":"task-demo-001","matchedAgents":["github-ops-1","reporter-1"],"plannedSteps":["Build execution context","Run matched agents","Persist execution notes","Return aggregated result"]}}
 {"timestamp":"2026-03-10T13:03:41.728Z","level":"INFO","message":"Execution complete","meta":{"taskId":"task-demo-001","jobCount":1,"memoryItems":3}}
+{"timestamp":"2026-03-10T15:19:04.794Z","level":"INFO","message":"Registered job: repo-health-check","meta":{}}
+{"timestamp":"2026-03-10T15:19:04.799Z","level":"INFO","message":"Task task-demo-001 matched 2 agent(s)","meta":{"taskId":"task-demo-001","matchedAgents":["github-ops-1","reporter-1"],"plannedSteps":["Build execution context","Run matched agents","Persist execution notes","Return aggregated result"]}}
+{"timestamp":"2026-03-10T15:19:05.110Z","level":"INFO","message":"Running job repo-health-check","meta":{"jobId":"repo-health-check","handler":"github.repoHealth"}}
+{"timestamp":"2026-03-10T15:19:05.149Z","level":"INFO","message":"Execution complete","meta":{"taskId":"task-demo-001","jobCount":1,"memoryItems":6,"dueJobsExecuted":1}}
