@@ -54,6 +54,12 @@ Most agent projects look impressive but are hard to customize for real daily wor
 - knowledge search
 - policy and permissions layer
 
+## Project management
+
+- Milestones are now set up directly in GitHub for foundation, automation, multi-agent, and productization phases.
+- Roadmap issues are published to make public iteration visible.
+- This repo is intended to evolve in the open.
+
 ## Example run
 
 ```bash
