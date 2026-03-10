@@ -5,6 +5,8 @@ import { MemoryStore } from './core/memory.js';
 import { Scheduler } from './core/scheduler.js';
 import { Orchestrator } from './core/orchestrator.js';
 import { ToolRunner } from './core/tool-runner.js';
+import { Planner } from './core/planner.js';
+import { createDefaultPolicyEngine } from './core/policy.js';
 import { Logger } from './runtime/logger.js';
 import { GitHubAdapter } from './adapters/github.js';
 import { createGitHubOpsAgent } from './agents/github-ops-agent.js';
@@ -13,6 +15,8 @@ const logger = new Logger();
 const registry = new Registry();
 const memory = new MemoryStore();
 const scheduler = new Scheduler({ logger });
+const planner = new Planner();
+const policy = createDefaultPolicyEngine();
 const github = new GitHubAdapter();
 
 registry.registerTool({
@@ -54,10 +58,12 @@ const orchestrator = new Orchestrator({
   registry,
   logger,
   memory,
+  planner,
   contextFactory(baseContext) {
     return {
       ...baseContext,
-      toolRunner
+      toolRunner,
+      policy
     };
   }
 });
@@ -83,7 +89,8 @@ registry.registerAgent(
       return {
         agentId: 'reporter-1',
         taskId: task.id,
-        summary: `Reporter prepared summary for ${task.id}`
+        summary: `Reporter prepared summary for ${task.id}`,
+        planSummary: context.plan?.summary ?? null
       };
     }
   })

@@ -1,9 +1,10 @@
 export class Orchestrator {
-  constructor({ registry, logger, memory, contextFactory = null }) {
+  constructor({ registry, logger, memory, contextFactory = null, planner = null }) {
     this.registry = registry;
     this.logger = logger;
     this.memory = memory;
     this.contextFactory = contextFactory;
+    this.planner = planner;
   }
 
   async execute(task) {
@@ -12,10 +13,12 @@ export class Orchestrator {
       throw new Error(`No agents found for task: ${task.id}`);
     }
 
+    const plan = this.planner ? this.planner.build(task, this.registry) : null;
     const baseContext = {
       memory: this.memory.getRecent(),
       tools: this.registry.listTools(),
-      tags: task.tags
+      tags: task.tags,
+      plan
     };
     const context = this.contextFactory ? await this.contextFactory(baseContext, task) : baseContext;
 
@@ -36,6 +39,7 @@ export class Orchestrator {
 
     return {
       task,
+      plan,
       results,
       executedAt: new Date().toISOString()
     };

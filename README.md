@@ -28,6 +28,8 @@ Most agent projects look impressive but are hard to customize for real daily wor
 - `src/core/orchestrator.js` — task routing and execution loop
 - `src/core/registry.js` — skills and tools registry
 - `src/core/tool-runner.js` — actual tool execution layer
+- `src/core/planner.js` — task planning and step suggestions
+- `src/core/policy.js` — default permission and safety checks
 - `src/core/memory.js` — in-memory + file-backed memory abstraction
 - `src/core/scheduler.js` — scheduled task management
 - `src/adapters/github.js` — GitHub repository inspection adapter
