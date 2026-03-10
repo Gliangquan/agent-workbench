@@ -27,8 +27,11 @@ Most agent projects look impressive but are hard to customize for real daily wor
 - `src/core/agent.js` — agent contract
 - `src/core/orchestrator.js` — task routing and execution loop
 - `src/core/registry.js` — skills and tools registry
+- `src/core/tool-runner.js` — actual tool execution layer
 - `src/core/memory.js` — in-memory + file-backed memory abstraction
 - `src/core/scheduler.js` — scheduled task management
+- `src/adapters/github.js` — GitHub repository inspection adapter
+- `src/agents/github-ops-agent.js` — example GitHub ops agent
 - `src/runtime/logger.js` — execution logging
 - `src/index.js` — runnable demo entrypoint
 

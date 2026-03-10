@@ -16,6 +16,10 @@ export class Registry {
     return this.agents.filter((agent) => agent.canHandle(task));
   }
 
+  getTool(name) {
+    return this.tools.find((tool) => tool.name === name) ?? null;
+  }
+
   listTools() {
     return this.tools.map((tool) => tool.name);
   }

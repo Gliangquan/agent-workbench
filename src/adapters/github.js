@@ -18,4 +18,19 @@ export class GitHubAdapter {
 
     return response.json();
   }
+
+  async inspectRepo(fullName) {
+    const repo = await this.getRepo(fullName);
+    return {
+      fullName: repo.full_name,
+      description: repo.description,
+      stars: repo.stargazers_count,
+      forks: repo.forks_count,
+      openIssues: repo.open_issues_count,
+      language: repo.language,
+      defaultBranch: repo.default_branch,
+      updatedAt: repo.updated_at,
+      url: repo.html_url
+    };
+  }
 }

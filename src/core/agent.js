@@ -1,9 +1,10 @@
 export class Agent {
-  constructor({ id, name, role, capabilities = [] }) {
+  constructor({ id, name, role, capabilities = [], handler = null }) {
     this.id = id;
     this.name = name;
     this.role = role;
     this.capabilities = capabilities;
+    this.handler = handler;
   }
 
   canHandle(task) {
@@ -11,6 +12,10 @@ export class Agent {
   }
 
   async run(task, context) {
+    if (this.handler) {
+      return this.handler(task, context, this);
+    }
+
     return {
       agentId: this.id,
       taskId: task.id,

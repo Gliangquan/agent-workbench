@@ -4,33 +4,88 @@ import { Registry } from './core/registry.js';
 import { MemoryStore } from './core/memory.js';
 import { Scheduler } from './core/scheduler.js';
 import { Orchestrator } from './core/orchestrator.js';
+import { ToolRunner } from './core/tool-runner.js';
 import { Logger } from './runtime/logger.js';
+import { GitHubAdapter } from './adapters/github.js';
+import { createGitHubOpsAgent } from './agents/github-ops-agent.js';
 
 const logger = new Logger();
 const registry = new Registry();
 const memory = new MemoryStore();
 const scheduler = new Scheduler({ logger });
-const orchestrator = new Orchestrator({ registry, logger, memory });
+const github = new GitHubAdapter();
 
-registry.registerTool({ name: 'github.inspect' });
-registry.registerTool({ name: 'memory.append' });
-registry.registerTool({ name: 'report.generate' });
+registry.registerTool({
+  name: 'github.inspect',
+  async execute({ fullName }) {
+    return github.inspectRepo(fullName);
+  }
+});
 
-registry.registerAgent(
-  new Agent({
-    id: 'planner-1',
-    name: 'Planner',
-    role: 'Break down tasks and route them',
-    capabilities: ['analysis', 'github']
-  })
-);
+registry.registerTool({
+  name: 'report.generate',
+  async execute({ repo }) {
+    return {
+      title: `GitHub ops report: ${repo.fullName}`,
+      bullets: [
+        `Description: ${repo.description || 'N/A'}`,
+        `Stars: ${repo.stars}`,
+        `Forks: ${repo.forks}`,
+        `Open issues: ${repo.openIssues}`,
+        `Language: ${repo.language || 'Unknown'}`,
+        `Default branch: ${repo.defaultBranch}`,
+        `Updated at: ${repo.updatedAt}`,
+        `URL: ${repo.url}`
+      ]
+    };
+  }
+});
 
+registry.registerTool({
+  name: 'memory.append',
+  async execute({ item }) {
+    memory.append(item);
+    return { ok: true };
+  }
+});
+
+const toolRunner = new ToolRunner({ registry });
+const orchestrator = new Orchestrator({
+  registry,
+  logger,
+  memory,
+  contextFactory(baseContext) {
+    return {
+      ...baseContext,
+      toolRunner
+    };
+  }
+});
+
+const githubOps = createGitHubOpsAgent();
+registry.registerAgent(new Agent(githubOps));
 registry.registerAgent(
   new Agent({
     id: 'reporter-1',
     name: 'Reporter',
     role: 'Summarize outputs for humans',
-    capabilities: ['reporting']
+    capabilities: ['reporting'],
+    async handler(task, context) {
+      await context.toolRunner.run('memory.append', {
+        item: {
+          type: 'reporting',
+          taskId: task.id,
+          summary: `Reporter prepared summary for ${task.id}`,
+          createdAt: new Date().toISOString()
+        }
+      });
+
+      return {
+        agentId: 'reporter-1',
+        taskId: task.id,
+        summary: `Reporter prepared summary for ${task.id}`
+      };
+    }
   })
 );
 
@@ -44,4 +99,4 @@ const task = JSON.parse(readFileSync(new URL('../examples/demo-task.json', impor
 const result = await orchestrator.execute(task);
 
 logger.info('Execution complete');
-console.log(JSON.stringify({ jobs: scheduler.list(), result }, null, 2));
+console.log(JSON.stringify({ jobs: scheduler.list(), result, memory: memory.getRecent() }, null, 2));
